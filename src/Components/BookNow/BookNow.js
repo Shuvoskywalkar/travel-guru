@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import fakedata from './Fakedata'
+import './booknow.css'
 const BookNow = () => {
     // const{Fakedata2}=props.Fakedata
     // const fakedatas=fakedata.slice(0,3)

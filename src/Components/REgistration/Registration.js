@@ -1,91 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
+import Header from '../Header/Header';
 import './Registration.css'
 const Registration = () => {
-    return (
-        <div>
-            
-    <div class="page-wrapper bg-gra-02 p-t-130 p-b-100 font-poppins">
-        <div class="wrapper wrapper--w680">
-            <div class="card card-4">
-                <div class="card-body">
-                    <h2 class="title">Registration Form</h2>
-                    <form method="POST">
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">first name</label>
-                                    <input class="input--style-4" type="text" name="first_name"/>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">last name</label>
-                                    <input class="input--style-4" type="text" name="last_name"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Birthday</label>
-                                    <div class="input-group-icon">
-                                        <input class="input--style-4 js-datepicker" type="text" name="birthday"/>
-                                        <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Gender</label>
-                                    <div class="p-t-10">
-                                        <label class="radio-container m-r-45">Male
-                                            <input type="radio" checked="checked" name="gender"/>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                        <label class="radio-container">Female
-                                            <input type="radio" name="gender"/>
-                                            <span class="checkmark"></span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row row-space">
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Email</label>
-                                    <input class="input--style-4" type="email" name="email"/>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="input-group">
-                                    <label class="label">Phone Number</label>
-                                    <input class="input--style-4" type="text" name="phone"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="input-group">
-                            <label class="label">Subject</label>
-                            <div class="rs-select2 js-select-simple select--no-search">
-                                <select name="subject">
-                                    <option disabled="disabled" selected="selected">Choose option</option>
-                                    <option>Subject 1</option>
-                                    <option>Subject 2</option>
-                                    <option>Subject 3</option>
-                                </select>
-                                <div class="select-dropdown"></div>
-                            </div>
-                        </div>
-                        <div class="p-t-15">
-                            <button class="btn btn--radius-2 btn--blue" type="submit">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-    );
-};
 
+    return (
+   <body>
+       <Header/>
+         <div class="container ">
+    <div class="row">
+      <div class="col-lg-10 col-xl-9 mx-auto">
+        <div class="card card-signin flex-row mx-25 my-3 w-75">
+          
+          <div class="card-body ">
+            <h5 class="card-title text-center">Register</h5>
+            <form class="form-signin ">
+            <div class="form-label-group ">
+                <input type="text" id="inputFirstname" class="form-control " placeholder="Username" required autofocus />
+                <label for="inputUserame">First Name</label>
+              </div>
+
+              <div class="form-label-group">
+                <input type="email" id="inputLastname" class="form-control " placeholder="Email address" required />
+                <label for="inputEmail">Last Name</label>
+              </div>
+              
+              <hr/>
+              
+
+              <div class="form-label-group">
+                <input type="email" id="inputEmail" class="form-control " placeholder="Email address" required />
+                <label for="inputEmail">Email address</label>
+              </div>
+              
+              <hr/>
+
+              <div class="form-label-group">
+                <input type="password" id="inputPassword" class="form-control " placeholder="Password" required />
+                <label for="inputPassword">Password</label>
+              </div>
+              
+              <div class="form-label-group ">
+                <input type="password" id="inputConfirmPassword" class="form-control  " placeholder="Password" required />
+                <label for="inputConfirmPassword">Confirm pasword</label>
+              </div>
+
+              <button class="btn btn-lg btn-primary btn-block text-uppercase " type="submit">Register</button>
+            
+              <hr class="my-4"/>
+              <button class="btn btn-lg btn-google btn-block text-uppercase " type="submit"><i class="fab fa-google mr-2"></i> Sign up with Google</button>
+              <button class="btn btn-lg btn-facebook btn-block text-uppercase " type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign up with Facebook</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+   </body>
+
+
+    )}
 export default Registration;

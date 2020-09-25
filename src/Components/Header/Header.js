@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Header.css'
 import Logo from '../../Image/Logo.png'
-const Header = () => {
-    return (
+import { Context } from '../../App';
+const Header = (props) => {
+ console.log(props)
+ 
+ const [loggedUser,setloggedUser]=useContext(Context)
+ console.log(loggedUser)
+  return (
         <nav class="navbar navbar-expand-lg navbar-light p-5 ">
 <img src={Logo} alt="Logo is not here" class="mx-5 w-15"/>
   <input class="form-control mr-sm-1 w-50 mx-5" type="search" placeholder="Search your Destination" aria-label="Search"/>
@@ -25,10 +30,20 @@ const Header = () => {
       
     </ul>
     <form class="form-inline my-2 my-lg-0">
+     {loggedUser.email?
+        <button class="btn btn-success
+     my-2 my-sm-0 px-4  w-175 mx-5" type="submit" >{loggedUser.email}</button>
      
-      <button class="btn btn-warning
-       my-2 my-sm-0 px-4  w-175 mx-5" type="submit">Login</button>
-    </form>
+     : <button class="btn btn-warning
+     my-2 my-sm-0 px-4  w-175 mx-5" type="submit">Login</button>
+     
+    
+  
+     }
+     {loggedUser.email && 
+       <button class="btn btn-danger
+       my-2 my-sm-0 px-4  w-175 mx-5" type="submit" onClick={outSign=>{setloggedUser("")}}>Sign Out</button>}
+     </form>
   </div>
 </nav>
 

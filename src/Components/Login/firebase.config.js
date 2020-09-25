@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyCDr92yss7mTso3r0i3Ysl2FUhSAHcvA3k",
   authDomain: "travel-guru-c8a0c.firebaseapp.com",
   databaseURL: "https://travel-guru-c8a0c.firebaseio.com",

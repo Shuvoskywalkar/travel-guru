@@ -1,17 +1,5 @@
-import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-// import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
+import React, { useContext, useState } from 'react';
+import './Login.css'
 import * as firebase from "firebase/app";
 
 // If you enabled Analytics in your project, add the Firebase SDK for Analytics
@@ -21,13 +9,38 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/firestore";
 import firebaseConfig from './firebase.config';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link, useHistory, useLocation
+} from "react-router-dom";
+import Header from '../Header/Header';
+import { Context } from '../../App';
 if (!firebase.apps.length)  {
   firebase.initializeApp(firebaseConfig);
   }
 
 const Login = () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  const FBprovider = new firebase.auth.FacebookAuthProvider();
+  const [loggedUser,setloggedUser]=useContext(Context)
+  const history = useHistory()
+  const location = useLocation();
+  let { from } = location.state || { from: { pathname: "/" } };
+ 
+  
+  const [newUser,setnewUser]=useState(false);
+  const [user,setUser]=useState({
+    issigned:false,
+    name:"",
+    email:"",
+    image:"",
+    password:"",
+    error:"",
+    success:false,
+    signup:false
+  })
+ 
   const googlesign=()=>{
     
       firebase.auth().signInWithPopup(provider)
@@ -36,7 +49,18 @@ const Login = () => {
         var token = result.credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-        console.log(user)
+        // cons/ole.log(user)
+        const{displayName,email,photoURL}=user
+        console.log(displayName)
+        const signedData={
+          issigned:true,
+          name:displayName,
+          email:email,
+          image:photoURL
+        }
+        setUser(signedData)
+        setloggedUser(user)
+        history.replace(from);
       }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -48,14 +72,17 @@ const Login = () => {
         // ...
       });
     }
+    const FBprovider = new firebase.auth.FacebookAuthProvider();
  const facebookSign=()=>{
   firebase.auth().signInWithPopup(FBprovider).then(function(result) {
-    // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+  
     var token = result.credential.accessToken;
-    // The signed-in user info.
-    var user = result.user;
-    console.log(user)
-    // ...
+   
+    var User = result.user;
+    console.log('FB User',User)
+   
+    // setloggedUser(user)
+    // history.replace(from);
   }).catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -67,131 +94,198 @@ const Login = () => {
     // ...
   });
  }
-    function Copyright() {
-        return (
-          <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-              Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-          </Typography>
-        );
-      }
-      const useStyles = makeStyles((theme) => ({
-        paper: {
-          marginTop: theme.spacing(8),
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        },
-        avatar: {
-          margin: theme.spacing(1),
-          backgroundColor: theme.palette.secondary.main,
-        },
-        form: {
-          width: '100%', // Fix IE 11 issue.
-          marginTop: theme.spacing(1),
-        },
-        submit: {
-          margin: theme.spacing(3, 0, 2),
-        },
-      }));
-      const classes = useStyles();
-      
+//  const signOut=()=>{
+//   firebase.auth().signOut()
+//   .then(function() {
+    
+//    console.log('getddahelloutaere')
+//    const signnot={
+//     issigned:false,
+//      name:"",
+//      email:"",
+//      image:"",
+//      password:""
+     
+//    }
+//    setUser(signnot)
+ 
+//   }
+  
+//   )
 
-    return (
+//   .catch(function(error) {
+//     console.log(error.message)
+//   });
+//  }
+ const changehandle=(e)=>{
+  let isformValid;
+  if(e.target.name==="email"){
+      isformValid= /\S+@\S+\.\S+/.test(e.target.value)
+  //    console.log(validEmail)
+  }
+  if (e.target.name==="password") {
+      const validLength=e.target.value.length>6
+      const validNum=/\d{1}/.test(e.target.value);
+      isformValid=validLength && validNum;
+      
+  }
+  if (isformValid) {
+      console.log("abrakadabrah")
+    
+      const newuserInfo={...user};
+      newuserInfo[e.target.name]=e.target.value;
+      setUser(newuserInfo)
+      // console.log(name)
+
+      
+  }
+  
+  if (!isformValid) {
+      console.log("abrabrah")
+      
+  }}
+  const submitHandle=(e)=>{
+ 
+    if (newUser && user.email && user.password) {
+      firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+      
+      .then(res=>{
+        user.issigned=true
+           
         
-            
-    <div>
-   <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-          >
-            Sign In
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            className={classes.submit}
-            onClick={googlesign}
-          >
-            Sign In via Google
-          </Button>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="light"
-            className={classes.submit}
-            onClick={facebookSign}
-          >
-            Sign In via FB
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
-  )
+        const newuserInfo={...user}
+        newuserInfo.success=true
+        newuserInfo.error=""
+       setUser(newuserInfo);
+       
+       updateUserProfie(user.name)
+       setloggedUser(user)
+       history.replace(from);
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        
+        const newuserInfo={...user}
+          newuserInfo.error=error.message
+         newuserInfo.success=false
+          setUser(newuserInfo);
 
-    </div>
+        // ...
+      })
       
+      
+    }
+   if (!newUser && user.email && user.password) {
+    firebase.auth().signInWithEmailAndPassword(user.email, user.password)
+    .then(res=>{
+      
+      user.issigned=true
+           
+        
+      const newuserInfo={...user}
+      newuserInfo.success=true
+      newuserInfo.error=""
+     setUser(newuserInfo);
+     console.log(res)
+     setloggedUser(user)
+     history.replace(from);
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      
+      const newuserInfo={...user}
+      newuserInfo.success=false
+      newuserInfo.error=errorMessage
+     setUser(newuserInfo);
+      // ...
+    }); 
+   }
+
+    e.preventDefault();
+  
+  }
+  const signUP=()=>{
+    const signUper={...user}
+     signUper.signup=true
+     setUser(signUper)
+  }
+  const signinHandler=()=>{
+    const signUper={...user}
+    signUper.signup=false
+    setUser(signUper) 
+  }
+      
+      // const goHandle=()=>{
+      //   history.push('/Registration')
+      // }
+      const updateUserProfie=nameis=>{
+        var user = firebase.auth().currentUser;
+
+user.updateProfile({
+  displayName:nameis
+}).then(function() {
+  console.log("Update successful.....")
+}).catch(function(error) {
+  console.log(error)
+});
+      }
+
+          
+    return (
+      <div >
+       <Header name={loggedUser.email}/>
+    <h1>{loggedUser.email}</h1>
+  <div class="container">
+  <h1>{user.name}</h1>
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5 w-100 ml-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign In</h5>
+            <form class="form-signin" onSubmit={submitHandle}>
+                {newUser&&
+              <input type="text" name="name" className="form-control w-100 bg-light my-2" placeholder="enter the Username"/>}
+                {newUser&&
+                <input onBlur={changehandle} type="text" className="form-control w-100 bg-light  my-2" name="firstName" placeholder="first Name" />
+                }
+                {newUser&&<input onBlur={changehandle} type="text" className="form-control w-100 bg-light  my-2" name="lastName" placeholder="enter last name" />}
+
+                <input onBlur={changehandle} type="text" className="form-control w-100 bg-light  my-2" name="email" placeholder="enter the Email" />
+
+                
+ 
+ 
+
+                <input onBlur={changehandle} className="form-control w-100 bg-light  my-2" type="text" id="passCode" name="password" placeholder="enter the password"/>
+                 
+                 {newUser&&
+                 <input onBlur={changehandle} className="form-control w-100 bg-light  my-2" type="text" name="confirmation" placeholder="confirm the password"/>}
+            
+              <div class="custom-control custom-checkbox mb-3">
+                <input type="checkbox" class="custom-control-input" onClick={()=>setnewUser(!newUser)} id="customCheck1"/>
+                <label class="custom-control-label" for="customCheck1">Create New Account</label>
+              </div>
+             {user.issigned==false && newUser==false? <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" onClick={signinHandler}>Sign in</button>
+             : <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit" onClick={signinHandler} >Sign up</button>}
+                 
+              <hr class="my-4"/>
+              <button class="btn btn-lg btn-google btn-block text-uppercase" type="submit" onClick={googlesign}><i class="fab fa-google mr-2"></i> Sign in with Google</button>
+              <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit" onClick={facebookSign}><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
+              {/* <Link to="/Registration"> */}
+                {/* <button class="btn btn-lg btn-facebook btn-block text-uppercase" type="submit" onClick={signUP} ><i class=" mr-2"></i> create an account?</button> */}
+                {/* </Link> */}
+            </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {user.success?<h4 className="text-success state"  >User is{newUser?"Created ":"logged in"}succesfuly</h4>:<h4 className="text-danger state">{user.error}</h4>}
+
+</div>      
+            
     );
 };
 

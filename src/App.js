@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import {
@@ -15,8 +15,15 @@ import Details from './Components/Details/Details'
 import Login from './Components/Login/Login'
 import Nomatch from './Nomatch/Nomatch';
 import Registration from './Components/REgistration/Registration';
+import Roominfo from './Components/Roominfo/Roominfo';
+import PrivateRoute from '../src/Components/Protected/Protected'
+export const Context=createContext()
 function App() {
+  const [loggedUser,setloggedUser]=useState({})
+ const {email,name}=loggedUser
   return (
+    <Context.Provider value={[loggedUser,setloggedUser]}>
+     {/* <h1>{email}</h1> */}
     <Router>
       <Switch>
         <Route exact path="/">
@@ -26,7 +33,7 @@ function App() {
           <Frontpage></Frontpage>
         </Route>
         <Route path="/header">
-          <Header></Header>
+          <Header email={email}></Header>
         </Route>
         <Route path="/Showdetails/:proKey">
           <Showdetails></Showdetails>
@@ -40,11 +47,17 @@ function App() {
         <Route path="/Registration">
           <Registration/>
         </Route>
-        <Route path="*">
+      
+        <PrivateRoute path="/RoomInfo/:number">
+          <Roominfo/>
+          </PrivateRoute> 
+         
+                            <Route path="*">
           <Nomatch/>
         </Route>
       </Switch>
     </Router>
+    </Context.Provider>
       );
 }
 
