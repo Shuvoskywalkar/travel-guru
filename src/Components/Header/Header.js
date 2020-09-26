@@ -3,10 +3,10 @@ import './Header.css'
 import Logo from '../../Image/Logo.png'
 import { Context } from '../../App';
 const Header = (props) => {
- console.log(props)
+//  console.log(props)
  
  const [loggedUser,setloggedUser]=useContext(Context)
- console.log(loggedUser)
+//  console.log(loggedUser)
   return (
         <nav class="navbar navbar-expand-lg navbar-light p-5 ">
 <img src={Logo} alt="Logo is not here" class="mx-5 w-15"/>
